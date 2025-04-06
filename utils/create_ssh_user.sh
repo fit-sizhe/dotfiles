@@ -141,27 +141,6 @@ fi
 chown "$USERNAME:$USERGROUP" "$API_KEYS_FILE"
 chmod 600 "$API_KEYS_FILE"
 
-# Add source .api_keys to shell config if it doesn't exist
-if [ "$DEFAULT_SHELL" = "$(which zsh)" ]; then
-    SHELL_RC="$USER_HOME/.zshrc"
-else
-    SHELL_RC="$USER_HOME/.bashrc"
-fi
-
-if [ ! -f "$SHELL_RC" ]; then
-    echo "Creating $SHELL_RC..."
-    touch "$SHELL_RC"
-    chown "$USERNAME:$USERGROUP" "$SHELL_RC"
-fi
-
-if ! grep -q "source.*\.api_keys" "$SHELL_RC"; then
-    echo "Adding .api_keys sourcing to $SHELL_RC..."
-    echo "" >> "$SHELL_RC"
-    echo "# Load API keys and environment variables" >> "$SHELL_RC"
-    echo "[ -f ~/.api_keys ] && source ~/.api_keys" >> "$SHELL_RC"
-    chown "$USERNAME:$USERGROUP" "$SHELL_RC"
-fi
-
 # Ensure SSH service is running
 echo "Ensuring SSH service is active..."
 if command -v systemctl &> /dev/null; then
